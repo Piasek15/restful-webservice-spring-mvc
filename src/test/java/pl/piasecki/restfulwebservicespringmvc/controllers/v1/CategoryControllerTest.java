@@ -15,8 +15,10 @@ import pl.piasecki.restfulwebservicespringmvc.services.CategoryService;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,6 +63,16 @@ public class CategoryControllerTest {
 
     @Test
     public void getCategoryByName() throws Exception {
+        CategoryDTO category1 = new CategoryDTO();
+        category1.setId(1L);
+        category1.setName("aaa");
+
+        when(categoryService.getCategoryByName(anyString())).thenReturn(category1);
+
+        mockMvc.perform(get("/api/v1/categories/aaa")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.name", equalTo("aaa")));
     }
 
 }
