@@ -12,6 +12,7 @@ import pl.piasecki.restfulwebservicespringmvc.bootstrap.Bootstrap;
 import pl.piasecki.restfulwebservicespringmvc.domain.Customer;
 import pl.piasecki.restfulwebservicespringmvc.repositories.CategoryRepository;
 import pl.piasecki.restfulwebservicespringmvc.repositories.CustomerRepository;
+import pl.piasecki.restfulwebservicespringmvc.repositories.VendorRepository;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class CustomerServiceImplIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    VendorRepository vendorRepository;
+
     CustomerService customerService;
 
     @Before
@@ -36,7 +40,7 @@ public class CustomerServiceImplIT {
         System.out.println("Loading Customer Data");
         System.out.println(customerRepository.findAll().size());
 
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
