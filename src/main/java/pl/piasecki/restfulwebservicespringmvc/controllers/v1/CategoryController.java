@@ -11,8 +11,10 @@ import pl.piasecki.restfulwebservicespringmvc.api.v1.model.CategoryListDTO;
 import pl.piasecki.restfulwebservicespringmvc.services.CategoryService;
 
 @Controller
-@RequestMapping("/api/v1/categories/")
+@RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
+
+    public static final String BASE_URL = "/api/v1/categories";
 
     private final CategoryService categoryService;
 
@@ -26,7 +28,7 @@ public class CategoryController {
                 new CategoryListDTO(categoryService.getAllCategories()), HttpStatus.OK);
     }
 
-    @GetMapping("{name}")
+    @GetMapping("/{name}")
     public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name){
         return new ResponseEntity<CategoryDTO>(
                 categoryService.getCategoryByName(name), HttpStatus.OK);
