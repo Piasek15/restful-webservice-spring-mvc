@@ -41,4 +41,10 @@ public class VendorController {
     public VendorDTO updateVendor(@PathVariable Long id, @RequestBody VendorDTO vendorDTO){
         return vendorService.updateVendor(id, vendorDTO);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteVendor(@PathVariable Long id){
+        vendorService.deleteVendor(id);
+    }
 }

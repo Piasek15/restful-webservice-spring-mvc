@@ -59,6 +59,16 @@ public class VendorServiceImpl implements VendorService {
         return saveAndReturnDTO(vendor);
     }
 
+    @Override
+    public void deleteVendor(Long id) {
+        vendorRepository.deleteById(id);
+    }
+
+//    @Override
+//    public VendorDTO patchVendor(Long id, VendorDTO vendorDTO) {
+//        return null; //no sense
+//    }
+
 
     private VendorDTO saveAndReturnDTO(Vendor vendor){
         Vendor savedVendor = vendorRepository.save(vendor);

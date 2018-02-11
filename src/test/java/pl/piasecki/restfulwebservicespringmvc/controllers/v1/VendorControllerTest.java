@@ -18,10 +18,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.piasecki.restfulwebservicespringmvc.controllers.v1.AbstractRestControllerTest.asJsonString;
@@ -111,5 +110,14 @@ public class VendorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)))
                 .andExpect(jsonPath("$.vendor_url", equalTo(BASE_URL + "/1")));
+    }
+
+    @Test
+    public void deleteVendor() throws Exception {
+        mockMvc.perform(delete(BASE_URL + "/" + ID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(vendorService).deleteVendor(ID);
     }
 }

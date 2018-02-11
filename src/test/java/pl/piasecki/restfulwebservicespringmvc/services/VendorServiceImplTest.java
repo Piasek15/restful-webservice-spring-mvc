@@ -16,6 +16,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pl.piasecki.restfulwebservicespringmvc.controllers.v1.VendorController.BASE_URL;
 
@@ -96,5 +98,12 @@ public class VendorServiceImplTest {
         //then
         assertEquals(vendorDTO.getName(), updatedDTO.getName());
         assertEquals(BASE_URL + "/" + ID, updatedDTO.getVendorUrl());
+    }
+
+    @Test
+    public void deleteVendor() throws Exception {
+        vendorRepository.deleteById(ID);
+
+        verify(vendorRepository, times(1)).deleteById(anyLong());
     }
 }
