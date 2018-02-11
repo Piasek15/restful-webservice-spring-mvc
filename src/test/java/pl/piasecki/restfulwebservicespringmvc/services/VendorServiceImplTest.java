@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import pl.piasecki.restfulwebservicespringmvc.api.v1.mapper.VendorMapper;
 import pl.piasecki.restfulwebservicespringmvc.api.v1.model.VendorDTO;
+import pl.piasecki.restfulwebservicespringmvc.controllers.v1.VendorController;
 import pl.piasecki.restfulwebservicespringmvc.domain.Vendor;
 import pl.piasecki.restfulwebservicespringmvc.repositories.VendorRepository;
 
@@ -13,8 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static pl.piasecki.restfulwebservicespringmvc.controllers.v1.VendorController.BASE_URL;
 
 public class VendorServiceImplTest {
 
@@ -55,4 +58,23 @@ public class VendorServiceImplTest {
         assertEquals(NAME, vendorDTO.getName());
     }
 
+    @Test
+    public void createNewVendor() throws Exception {
+        //given
+        VendorDTO vendorDTO = new VendorDTO();
+        vendorDTO.setName(NAME);
+
+        Vendor savedVendor = new Vendor();
+        savedVendor.setId(ID);
+        savedVendor.setName(vendorDTO.getName());
+
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(savedVendor);
+
+        //when
+        VendorDTO savedDTO = vendorService.createNewVendor(vendorDTO);
+
+        //then
+        assertEquals(vendorDTO.getName(), savedDTO.getName());
+        assertEquals(BASE_URL + "/" + ID, savedDTO.getVendorUrl());
+    }
 }

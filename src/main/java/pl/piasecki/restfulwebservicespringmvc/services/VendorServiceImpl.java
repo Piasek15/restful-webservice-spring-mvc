@@ -4,10 +4,13 @@ import org.springframework.stereotype.Service;
 import pl.piasecki.restfulwebservicespringmvc.api.v1.mapper.VendorMapper;
 import pl.piasecki.restfulwebservicespringmvc.api.v1.model.VendorDTO;
 import pl.piasecki.restfulwebservicespringmvc.controllers.v1.VendorController;
+import pl.piasecki.restfulwebservicespringmvc.domain.Vendor;
 import pl.piasecki.restfulwebservicespringmvc.repositories.VendorRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static pl.piasecki.restfulwebservicespringmvc.controllers.v1.VendorController.*;
 
 @Service
 public class VendorServiceImpl implements VendorService {
@@ -26,7 +29,7 @@ public class VendorServiceImpl implements VendorService {
                 .stream()
                 .map(vendor -> {
                     VendorDTO vendorDTO = vendorMapper.vendorToVendorDTO(vendor);
-                    vendorDTO.setVendorUrl(VendorController.BASE_URL + "/" + vendor.getId());
+                    vendorDTO.setVendorUrl(BASE_URL + "/" + vendor.getId());
                     return vendorDTO;
                 })
                 .collect(Collectors.toList());
@@ -37,9 +40,23 @@ public class VendorServiceImpl implements VendorService {
         return vendorRepository.findById(id)
                 .map(vendor -> {
                     VendorDTO vendorDTO = vendorMapper.vendorToVendorDTO(vendor);
-                    vendorDTO.setVendorUrl(VendorController.BASE_URL + "/" + vendor.getId());
+                    vendorDTO.setVendorUrl(BASE_URL + "/" + vendor.getId());
                     return vendorDTO;
                 })
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public VendorDTO createNewVendor(VendorDTO vendorDTO) {
+        Vendor vendor = vendorMapper.vendorDTOToVendor(vendorDTO);
+        return saveAndReturnDTO(vendor);
+    }
+
+
+    private VendorDTO saveAndReturnDTO(Vendor vendor){
+        Vendor savedVendor = vendorRepository.save(vendor);
+        VendorDTO returnDTO = vendorMapper.vendorToVendorDTO(savedVendor);
+        returnDTO.setVendorUrl(BASE_URL + "/" + savedVendor.getId());
+        return returnDTO;
     }
 }
