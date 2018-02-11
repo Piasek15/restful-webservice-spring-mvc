@@ -77,4 +77,24 @@ public class VendorServiceImplTest {
         assertEquals(vendorDTO.getName(), savedDTO.getName());
         assertEquals(BASE_URL + "/" + ID, savedDTO.getVendorUrl());
     }
+
+    @Test
+    public void updateVendor() throws Exception {
+        //given
+        VendorDTO vendorDTO = new VendorDTO();
+        vendorDTO.setName(NAME);
+
+        Vendor savedVendor = new Vendor();
+        savedVendor.setId(ID);
+        savedVendor.setName(vendorDTO.getName());
+
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(savedVendor);
+
+        //when
+        VendorDTO updatedDTO = vendorService.updateVendor(ID, vendorDTO);
+
+        //then
+        assertEquals(vendorDTO.getName(), updatedDTO.getName());
+        assertEquals(BASE_URL + "/" + ID, updatedDTO.getVendorUrl());
+    }
 }

@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.piasecki.restfulwebservicespringmvc.controllers.v1.AbstractRestControllerTest.asJsonString;
@@ -89,6 +90,25 @@ public class VendorControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(vendorDTO)))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", equalTo(NAME)))
+                .andExpect(jsonPath("$.vendor_url", equalTo(BASE_URL + "/1")));
+    }
+
+    @Test
+    public void updateVendor() throws Exception {
+        VendorDTO vendorDTO = new VendorDTO();
+        vendorDTO.setName(NAME);
+
+        VendorDTO savedDTO = new VendorDTO();
+        savedDTO.setName(vendorDTO.getName());
+        savedDTO.setVendorUrl(BASE_URL + "/1");
+
+        when(vendorService.updateVendor(anyLong(), any(VendorDTO.class))).thenReturn(savedDTO);
+
+        mockMvc.perform(put(BASE_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(vendorDTO)))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)))
                 .andExpect(jsonPath("$.vendor_url", equalTo(BASE_URL + "/1")));
     }
