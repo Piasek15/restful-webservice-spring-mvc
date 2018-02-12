@@ -1,5 +1,7 @@
 package pl.piasecki.restfulwebservicespringmvc.controllers.v1;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.piasecki.restfulwebservicespringmvc.api.v1.model.CustomerDTO;
 import pl.piasecki.restfulwebservicespringmvc.api.v1.model.CustomerListDTO;
 import pl.piasecki.restfulwebservicespringmvc.services.CustomerService;
-
+@Api(description = "This is Customer Controller")
 @RestController
 @RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
@@ -21,6 +23,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @ApiOperation(value = "This will get a list of customers.", notes = "These are some notes about the API.")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public CustomerListDTO getAllCustomers(){
